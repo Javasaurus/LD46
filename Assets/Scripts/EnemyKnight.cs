@@ -17,12 +17,15 @@ public class EnemyKnight : MonoBehaviour, Hittable
     public LayerMask groundLayer;
     public bool isGrounded;
 
+    public AudioClip deathSound;
+
     private Color originalColor;
     private bool dead;
     private Animator anim;
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private BoxCollider2D bc;
+
     private AudioSource sfx;
 
     private readonly float wanderInterval = 2f;
@@ -89,11 +92,17 @@ public class EnemyKnight : MonoBehaviour, Hittable
         //kill if they fly too high
         if (rb.velocity.y > 0 && transform.position.y > 3.5f)
         {
+            if (!dead)
+            {
+                sfx.pitch = .75f + (float)(rand.NextDouble() * .6f);
+                sfx.PlayOneShot(deathSound);
+            }
             hp = 0;
             dead = true;
             bc.enabled = false;
             anim.enabled = false;
             rb.gravityScale = 3;
+
         }
 
 
@@ -197,6 +206,11 @@ public class EnemyKnight : MonoBehaviour, Hittable
         rb.velocity = (Vector2.up + direction).normalized * Random.Range(15f, 0);
         if (hp <= 0)
         {
+            if (!dead)
+            {
+                sfx.pitch = .75f + (float)(rand.NextDouble() * .6f);
+                sfx.PlayOneShot(deathSound);
+            }
             dead = true;
             bc.enabled = false;
             anim.enabled = false;

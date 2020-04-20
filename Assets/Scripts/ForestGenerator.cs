@@ -4,9 +4,11 @@
 public class ForestGenerator : MonoBehaviour
 {
 
+    private const int finalLevel = 12;
     private GameObject cam;
 
     public GameObject CheckPointPrefab;
+    public GameObject EndPointPrefab;
 
     public GameObject rightBorder;
     public GameObject leftBorder;
@@ -23,7 +25,7 @@ public class ForestGenerator : MonoBehaviour
 
     public BoxCollider2D bc;
     // Start is called before the first frame update
-    public void InitChunk( bool spawnCheckpoint )
+    public void InitChunk( bool spawnCheckpoint, int waveNr )
     {
 
         UnlockLeft();
@@ -50,10 +52,11 @@ public class ForestGenerator : MonoBehaviour
         // spawn a house if needed
         if (spawnCheckpoint)
         {
-            GameObject checkPoint = GameObject.Instantiate(CheckPointPrefab);
+
+            GameObject checkPoint = waveNr == finalLevel ? GameObject.Instantiate(EndPointPrefab) : GameObject.Instantiate(CheckPointPrefab);
             checkPoint.transform.position = new Vector2(transform.position.x + (bc.bounds.size.x / 4), 4f);
             checkPoint.transform.parent = transform;
-            checkPoint.GetComponent<CheckPoint>().EnsureDoorIsClear();
+            checkPoint.GetComponent<CheckPoint>()?.EnsureDoorIsClear();
         }
 
     }
@@ -95,23 +98,32 @@ public class ForestGenerator : MonoBehaviour
     private void GenerateSpawnables( SpawnableLayer layer )
     {
         ForestManager manager = ForestManager.INSTANCE;
-        if (manager.chunkCount < layer.minChunkCount)
+        if (manager.chunkCount <= 2 || manager.chunkCount <= layer.minChunkCount)
         {
             return;
         }
 
-        int expectedAmount = manager.waveNr > fibbonacci.Length ? fibbonacci[fibbonacci.Length] : fibbonacci[manager.waveNr];
-
+        int expectedAmount = 8 + (3 * (manager.waveNr > fibbonacci.Length ? fibbonacci[fibbonacci.Length] : fibbonacci[manager.waveNr]));
+        Debug.Log(manager.chunkCount + " - " + expectedAmount + " will be spawned");
         for (int i = 0; i < expectedAmount; i++)
         {
-            if (Random.Range(0f, 1f) >= layer.rarity)
+            //ignore the rarity factor for the jam
+            //   if (1==1||Random.Range(0f, 1f) >= layer.rarity)
+            //      {
+            //spawn at a random spot 
+            float x = transform.position.x + Random.Range(.05f, .95f) * bc.bounds.size.x;
+            GameObject spawnable = GameObject.Instantiate(layer.prefab);
+            spawnable.transform.position = new Vector2(x, layer.yValue);
+            spawnable.transform.parent = transform;
+
+            EnemyKnight enemy = spawnable.GetComponent<EnemyKnight>();
+            if (enemy != null)
             {
-                //spawn at a random spot 
-                float x = transform.position.x + Random.Range(.05f, .95f) * bc.bounds.size.x;
-                GameObject spawnable = GameObject.Instantiate(layer.prefab);
-                spawnable.transform.position = new Vector2(x, layer.yValue);
-                spawnable.transform.parent = transform;
+                enemy.hp = 3 + manager.chunkCount / 2;
             }
+
+
+            //        }
         }
 
 
@@ -124,7 +136,7 @@ public class ForestGenerator : MonoBehaviour
         float temp = cam.transform.position.x * (1 - layer.parallaxEffect);
         float dist = (cam.transform.position.x * layer.parallaxEffect);
 
-        layer.parent.position = new Vector3(transform.position.x + dist, layer.parent.position.y, layer.parent.position.z);
+        layer.parent.position = new Vector3(transform.position.x - dist, layer.parent.position.y, layer.parent.position.z);
 
         if (temp > layer.startpos + layer.length)
         {

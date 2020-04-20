@@ -188,6 +188,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   isGrounded: 0
+  deathSound: {fileID: 8300000, guid: 4b3b7b98fa3bf3a43b06e9f79d98be5a, type: 3}
 --- !u!82 &4330055955150970146
 AudioSource:
   m_ObjectHideFlags: 0

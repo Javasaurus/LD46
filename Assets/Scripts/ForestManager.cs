@@ -24,7 +24,7 @@ public class ForestManager : MonoBehaviour
         maxChunk = instance;
 
         chunkCount++;
-        instance.InitChunk(true);
+        instance.InitChunk(true, 0);
         existingChunks.Add(instance);
         /*
         GenerateNext();
@@ -58,13 +58,13 @@ public class ForestManager : MonoBehaviour
             instance.transform.parent = transform;
             maxChunk = instance;
             chunkCount++;
-            instance.InitChunk(i == (amount - 1));
+            instance.InitChunk(i == (amount - 1), waveNr);
             existingChunks.Add(instance);
         }
         maxChunk.UnlockLeft();
         maxChunk.LockRight();
 
-    
+
     }
 
     public void LateUpdate()

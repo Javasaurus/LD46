@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 2249058951013228911}
   - component: {fileID: 2249058951013228910}
   - component: {fileID: 1385234255}
+  - component: {fileID: 8084707348029863297}
   m_Layer: 10
   m_Name: Main
   m_TagString: Untagged
@@ -371,7 +372,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.12536377, y: 0}
+  m_Offset: {x: 0.01585862, y: 0.3064127}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -382,7 +383,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.73584163, y: 2}
+  m_Size: {x: 0.51683146, y: 1.3871746}
   m_EdgeRadius: 0
 --- !u!114 &2249058951013228910
 MonoBehaviour:
@@ -443,7 +444,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.49644542
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -519,6 +520,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!58 &8084707348029863297
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2249058951013228896}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.75}
+  serializedVersion: 2
+  m_Radius: 0.306552
 --- !u!1 &2249058951089390856
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,6 +835,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 2249058951013228910}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  isGrounded: 0
   rb: {fileID: 0}
 --- !u!82 &954630113
 AudioSource:

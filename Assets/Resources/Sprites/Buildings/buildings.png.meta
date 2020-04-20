@@ -17,6 +17,9 @@ TextureImporter:
   - first:
       213: -7916908332688520428
     second: buildings_4
+  - first:
+      213: 6625692385018236696
+    second: buildings_5
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -127,7 +130,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8689b8ddb5cf6544d93a46ae7e073f93
+      spriteID: a5d427d7065de1343a8ba4451f730857
       internalID: 1168926902407322946
       vertices: []
       indices: 
@@ -148,7 +151,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 016fd9d628ed4074588e036e779ee035
+      spriteID: d701f1f1832ceb84a88e13e49b639ff2
       internalID: 7643761922474946111
       vertices: []
       indices: 
@@ -169,7 +172,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ea9330cb59271784f859bab700798a34
+      spriteID: 3d8077e9596855b4ea4d803d17d69097
       internalID: -5308527982003062785
       vertices: []
       indices: 
@@ -190,7 +193,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9522993f4a08e9d4ba532221b417ce17
+      spriteID: 850d3645eefc20846ad4189da231adb2
       internalID: -8922806545422484088
       vertices: []
       indices: 
@@ -211,8 +214,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06e1c80581e0d854fb2807aaa083a3a2
+      spriteID: 20fdd1011a7380a4b9e3b1ae6fea3b75
       internalID: -7916908332688520428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: buildings_5
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 677932d944056c944a510751d80d6179
+      internalID: 6625692385018236696
       vertices: []
       indices: 
       edges: []

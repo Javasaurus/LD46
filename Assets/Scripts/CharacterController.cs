@@ -42,6 +42,7 @@ public class CharacterController : MonoBehaviour, Hittable
     private Rigidbody2D rb;
     public SpriteRenderer sr;
     private BoxCollider2D bc;
+    private CircleCollider2D cc;
 
     public AudioSource staffAudio;
     public AudioSource footstepAudio;
@@ -68,6 +69,7 @@ public class CharacterController : MonoBehaviour, Hittable
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         bc = GetComponent<BoxCollider2D>();
+        cc = GetComponent<CircleCollider2D>();
         BabyObject.rb = BabyObject.GetComponent<Rigidbody2D>();
     }
 
@@ -99,7 +101,7 @@ public class CharacterController : MonoBehaviour, Hittable
         }
         else
         {
-            curBabyTimer += Time.deltaTime;
+            curBabyTimer += BabyObject.isGrounded ? Time.deltaTime : Time.deltaTime / 5f;
             if (curBabyTimer >= maxBabyTimer)
             {
                 GameObject.FindObjectOfType<GameOverController>().SetGameOver();
@@ -231,7 +233,7 @@ public class CharacterController : MonoBehaviour, Hittable
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 2);
         foreach (Collider2D collider in colliders)
         {
-            if (collider != bc)
+            if (collider != bc && collider != cc)
             {
                 CheckPoint c = collider.GetComponent<CheckPoint>();
                 if (c != null)
@@ -276,6 +278,8 @@ public class CharacterController : MonoBehaviour, Hittable
                         return true;
                     }
                 }
+
+
             }
         }
         return false;

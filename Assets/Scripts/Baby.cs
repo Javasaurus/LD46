@@ -3,7 +3,8 @@
 public class Baby : MonoBehaviour, Hittable, Pickup
 {
     public CharacterController parent;
-
+    public LayerMask groundLayer;
+    public bool isGrounded;
     [HideInInspector]
     public Rigidbody2D rb;
 
@@ -33,6 +34,9 @@ public class Baby : MonoBehaviour, Hittable, Pickup
             audio.pitch = 1f + (float)rand.NextDouble() * (.5f);
             audio.PlayOneShot(audio.clip);
         }
+
+        isGrounded = rb.velocity.y == 0 && Physics2D.OverlapCircle(transform.position, 0.05f, groundLayer);
+
     }
 
     public void PickUp( CharacterController c )

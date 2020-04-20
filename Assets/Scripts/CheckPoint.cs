@@ -104,7 +104,7 @@ public class CheckPoint : MonoBehaviour, Hittable
             overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, a);
             yield return null;
         }
-        Debug.Log("Waiting");
+
         //WAIT
         yield return new WaitForSeconds(3f);
         anim.SetTrigger("Open");
