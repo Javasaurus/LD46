@@ -9,6 +9,7 @@ public class GameOverController : MonoBehaviour
     public GameObject GameOverFieldUI;
     public void SetGameOver()
     {
+        Debug.Log("Game Over");
         HintsController.INSTANCE.ShowText("");
         GameOverFieldUI.SetActive(false);
         bgmController.SetGameOver();

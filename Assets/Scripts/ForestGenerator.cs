@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class ForestGenerator : MonoBehaviour
 {
 
-    private const int finalLevel = 12;
+    private const int finalLevel = 6;
     private GameObject cam;
 
     public GameObject CheckPointPrefab;
@@ -16,24 +17,39 @@ public class ForestGenerator : MonoBehaviour
     public ForestLayer[] forestLayers;
     public SpawnableLayer[] spawnableLayers;
 
-    [HideInInspector]
-    public bool doParallax = false;
+    public int[] fibbonacci = new int[] { 0, 2, 5, 8, 13, 21, 34, 55, 89 };
 
-
-    public int[] fibbonacci = new int[] { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 };
-
+    private List<GameObject> objects;
 
     public BoxCollider2D bc;
     // Start is called before the first frame update
-    public void InitChunk( bool spawnCheckpoint, int waveNr )
+    public void InitChunk( bool spawnCheckpoint,int amount, int waveNr,float xOffset )
     {
+        objects = new List<GameObject>();
 
+        ForestManager manager = ForestManager.INSTANCE;
         UnlockLeft();
         UnlockRight();
         cam = Camera.main.gameObject;
         //  bc = GetComponent<BoxCollider2D>();
         foreach (ForestLayer layer in forestLayers)
         {
+            switch (layer.parallaxLayer)
+            {
+                case 0:
+                    layer.parent = manager.front;
+                    break;
+                case 1:
+                    layer.parent = manager.back1;
+                    break;
+                case 2:
+                    layer.parent = manager.back2;
+                    break;
+                default:
+                    layer.parent = manager.back3;
+                    break;
+            }
+
             GenerateTrees(layer);
         }
 
@@ -52,13 +68,21 @@ public class ForestGenerator : MonoBehaviour
         // spawn a house if needed
         if (spawnCheckpoint)
         {
-
             GameObject checkPoint = waveNr == finalLevel ? GameObject.Instantiate(EndPointPrefab) : GameObject.Instantiate(CheckPointPrefab);
-            checkPoint.transform.position = new Vector2(transform.position.x + (bc.bounds.size.x / 4), 4f);
-            checkPoint.transform.parent = transform;
+            objects.Add(checkPoint);
+            if (waveNr == finalLevel)
+            {
+                HintsController.INSTANCE?.ShowText("The castle is right up ahead ! Let's go !");
+            }
+            //  checkPoint.transform.parent = forestLayers[0].parent;
+
+            checkPoint.transform.position = transform.position + (Vector3.right * 22.6f)+(Vector3.up*4.2f);
+            
+   
+
             checkPoint.GetComponent<CheckPoint>()?.EnsureDoorIsClear();
         }
-
+        Camera.main.GetComponent<CameraFollow>().onCameraTranslate += Parallax;
     }
 
     private void GenerateTrees( ForestLayer layer )
@@ -66,7 +90,7 @@ public class ForestGenerator : MonoBehaviour
         layer.startpos = transform.position.x;
         layer.length = bc.bounds.size.x;
 
-        for (float x = (transform.position.x - (bc.bounds.size.x / 2)); x < (transform.position.x + (bc.bounds.size.x / 2)); x += layer.interval)
+        for (float x = (transform.position.x - 2*(bc.bounds.size.x)); x < (transform.position.x + 2*(bc.bounds.size.x)); x += layer.interval)
         {
 
             float value = Mathf.PerlinNoise((transform.position.x + x) / 10, layer.layerY);
@@ -74,14 +98,14 @@ public class ForestGenerator : MonoBehaviour
             if (value > 1 - layer.density)
             {
                 GameObject instance = GameObject.Instantiate(layer.frontTreePrefabs[Random.Range(0, layer.frontTreePrefabs.Length)]);
-                instance.transform.position = new Vector2(x + Random.Range(-layer.interval, layer.interval), layer.layerY + Random.Range(-.08f, .08f));
+                instance.transform.localPosition = new Vector2(x+Random.Range(-layer.interval, layer.interval), layer.layerY + Random.Range(-.18f, .18f));
                 instance.transform.localScale = new Vector3(Random.Range(.95f, 1.05f), Random.Range(.95f, 1.05f), 1);
                 instance.transform.parent = layer.parent;
                 BoxCollider2D tc = instance.GetComponent<BoxCollider2D>();
                 SpriteRenderer tsr = instance.GetComponent<SpriteRenderer>();
                 tsr.color = layer.layerColor;
-                tsr.sortingOrder = layer.parallaxLayer;
-
+                tsr.sortingOrder = 3 - layer.parallaxLayer;
+                objects.Add(instance);
                 float ySize = tc.bounds.size.y / 2;
 
 
@@ -98,7 +122,7 @@ public class ForestGenerator : MonoBehaviour
     private void GenerateSpawnables( SpawnableLayer layer )
     {
         ForestManager manager = ForestManager.INSTANCE;
-        if (manager.chunkCount <= 2 || manager.chunkCount <= layer.minChunkCount)
+        if (manager.chunkCount <= 1 || manager.chunkCount <= layer.minChunkCount)
         {
             return;
         }
@@ -107,19 +131,16 @@ public class ForestGenerator : MonoBehaviour
         Debug.Log(manager.chunkCount + " - " + expectedAmount + " will be spawned");
         for (int i = 0; i < expectedAmount; i++)
         {
-            //ignore the rarity factor for the jam
-            //   if (1==1||Random.Range(0f, 1f) >= layer.rarity)
-            //      {
             //spawn at a random spot 
             float x = transform.position.x + Random.Range(.05f, .95f) * bc.bounds.size.x;
             GameObject spawnable = GameObject.Instantiate(layer.prefab);
             spawnable.transform.position = new Vector2(x, layer.yValue);
-            spawnable.transform.parent = transform;
-
+            spawnable.transform.parent = null;
+            objects.Add(spawnable);
             EnemyKnight enemy = spawnable.GetComponent<EnemyKnight>();
             if (enemy != null)
             {
-                enemy.hp = 3 + manager.chunkCount / 2;
+                enemy.hp = 3 + (manager.waveNr * 2);
             }
 
 
@@ -129,38 +150,31 @@ public class ForestGenerator : MonoBehaviour
 
     }
 
-    private void Paralax( ForestLayer layer )
+    public void Parallax( float delta )
     {
-        layer.startpos = transform.position.x;
-
-        float temp = cam.transform.position.x * (1 - layer.parallaxEffect);
-        float dist = (cam.transform.position.x * layer.parallaxEffect);
-
-        layer.parent.position = new Vector3(transform.position.x - dist, layer.parent.position.y, layer.parent.position.z);
-
-        if (temp > layer.startpos + layer.length)
+        if (ForestManager.currentChunk == this)
         {
-            layer.startpos += layer.length;
+            foreach (ForestLayer layer in forestLayers)
+            {
+                ParallaxLayer(layer, delta);
+            }
         }
-        else if (temp < layer.startpos - layer.length)
-        {
-            layer.startpos -= layer.length;
-        }
-
-
     }
 
-    public void FixedUpdate()
+    private void ParallaxLayer( ForestLayer layer, float delta )
     {
-        if (!doParallax)
-        {
-            return;
-        }
+        Vector3 newPos = layer.parent.localPosition;
+        newPos.x += delta * layer.parallaxEffect;
+        layer.parent.localPosition = newPos;
+    }
 
-        foreach (ForestLayer layer in forestLayers)
+    public void UnLoad()
+    {
+        foreach (GameObject go in objects)
         {
-            Paralax(layer);
+            GameObject.Destroy(go);
         }
+        Destroy(gameObject);
     }
 
     public void OnTriggerEnter2D( Collider2D collision )
@@ -168,16 +182,9 @@ public class ForestGenerator : MonoBehaviour
         if (collision.GetComponent<CharacterController>())
         {
             ForestManager.currentChunk = this;
-            doParallax = true;
         }
     }
-    public void OnTriggerExit2D( Collider2D collision )
-    {
-        if (collision.GetComponent<CharacterController>())
-        {
-            doParallax = false;
-        }
-    }
+
 
     public void LockLeft()
     {

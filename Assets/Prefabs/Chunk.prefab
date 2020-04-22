@@ -126,8 +126,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -538091425
+  m_SortingLayer: 1
   m_SortingOrder: -99
   m_Sprite: {fileID: 4341242654334979365, guid: 5db1e0ce37684b74d889194b9a352db4,
     type: 3}
@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 1405626509525914546}
   - component: {fileID: 1405626509525914543}
   - component: {fileID: 1405626509525914541}
-  - component: {fileID: 1405626509525914540}
+  - component: {fileID: 8994952081740293206}
   m_Layer: 8
   m_Name: Chunk
   m_TagString: Untagged
@@ -275,8 +275,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -803876895
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 4158732434352698325, guid: 5db1e0ce37684b74d889194b9a352db4,
     type: 3}
@@ -312,67 +312,54 @@ MonoBehaviour:
   - length: 0
     startpos: 0
     parallaxLayer: 0
-    parallaxEffect: 0.33
-    interval: 8
+    parallaxEffect: 0.37
+    interval: 2.1
     layerColor: {r: 1, g: 1, b: 1, a: 1}
     parent: {fileID: 1405626507874831311}
     density: 0.27
     frontTreePrefabs:
     - {fileID: 1477863428359506725, guid: 3fcbefa215c43ab44878d0e9d21cbc8c, type: 3}
-    layerY: 1.63
+    layerY: 1.45
     layerOffsetX: 0
     keepTriggers: 1
   - length: 0
     startpos: 0
-    parallaxLayer: -1
-    parallaxEffect: 0.2
-    interval: 5
+    parallaxLayer: 1
+    parallaxEffect: 0.12
+    interval: 1.6
     layerColor: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 1}
     parent: {fileID: 1405626507988431661}
-    density: 0.55
+    density: 0.75
     frontTreePrefabs:
     - {fileID: 2139948578359809717, guid: b084fa8968222d94db6cf6c8222e9dde, type: 3}
-    layerY: 2.23
+    layerY: 2.65
     layerOffsetX: 0
-    keepTriggers: 1
+    keepTriggers: 0
   - length: 0
     startpos: 0
-    parallaxLayer: -2
-    parallaxEffect: 0.13
-    interval: 0.94
+    parallaxLayer: 2
+    parallaxEffect: 0.05
+    interval: 0.84
     layerColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
     parent: {fileID: 1405626509434358797}
-    density: 0.73
+    density: 0.85
     frontTreePrefabs:
     - {fileID: 2139948578359809717, guid: b084fa8968222d94db6cf6c8222e9dde, type: 3}
-    layerY: 2.43
+    layerY: 3.3
     layerOffsetX: 0
     keepTriggers: 0
   - length: 0
     startpos: 0
-    parallaxLayer: -3
-    parallaxEffect: 0.02
-    interval: 0.47
+    parallaxLayer: 3
+    parallaxEffect: 0.01
+    interval: 0.62
     layerColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
     parent: {fileID: 1405626508992213568}
     density: 100
     frontTreePrefabs:
     - {fileID: 2139948578359809717, guid: b084fa8968222d94db6cf6c8222e9dde, type: 3}
-    layerY: 3.18
+    layerY: 4.12
     layerOffsetX: 0.56
-    keepTriggers: 0
-  - length: 0
-    startpos: 0
-    parallaxLayer: -3
-    parallaxEffect: 0.02
-    interval: 0.75
-    layerColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
-    parent: {fileID: 1405626508992213568}
-    density: 100
-    frontTreePrefabs:
-    - {fileID: 2139948578359809717, guid: b084fa8968222d94db6cf6c8222e9dde, type: 3}
-    layerY: 2.83
-    layerOffsetX: 0
     keepTriggers: 0
   spawnableLayers:
   - allowInSpawnZone: 1
@@ -381,7 +368,17 @@ MonoBehaviour:
       type: 3}
     rarity: 0
     minChunkCount: 0
-  doParallax: 0
+  - allowInSpawnZone: 1
+    yValue: 1.4
+    prefab: {fileID: 242001136441957562, guid: 21e71001ee172094c9ba80eb947af9b1, type: 3}
+    rarity: 0
+    minChunkCount: 3
+  - allowInSpawnZone: 1
+    yValue: 1.4
+    prefab: {fileID: 7563160897580187839, guid: 71a1580676b02c34da720811f7fb6805,
+      type: 3}
+    rarity: 0
+    minChunkCount: 5
   fibbonacci: 000000000100000001000000020000000300000005000000080000000d00000015000000220000003700000059000000
   bc: {fileID: 1405626509525914541}
 --- !u!61 &1405626509525914541
@@ -410,7 +407,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 10, y: 1.5292864}
   m_EdgeRadius: 0
---- !u!61 &1405626509525914540
+--- !u!61 &8994952081740293206
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -423,7 +420,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.25}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -434,7 +431,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 20, y: 2.5}
+  m_Size: {x: 20, y: 2}
   m_EdgeRadius: 0
 --- !u!1 &1405626509589997839
 GameObject:
@@ -536,8 +533,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -538091425
+  m_SortingLayer: 1
   m_SortingOrder: -99
   m_Sprite: {fileID: -4373184736405950995, guid: 5db1e0ce37684b74d889194b9a352db4,
     type: 3}
@@ -561,7 +558,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3446375317897676303}
   - component: {fileID: 7325111650126080733}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: LeftBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -618,7 +615,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3078817706083521241}
   - component: {fileID: 4001590376470097983}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: RightBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}

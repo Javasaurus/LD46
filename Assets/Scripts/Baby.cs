@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Baby : MonoBehaviour, Hittable, Pickup
 {
     public CharacterController parent;
+    public GameObject babyTrap;
+    public bool canBePickedUp = true;
     public LayerMask groundLayer;
     public bool isGrounded;
     [HideInInspector]
@@ -35,18 +38,51 @@ public class Baby : MonoBehaviour, Hittable, Pickup
             audio.PlayOneShot(audio.clip);
         }
 
-        isGrounded = rb.velocity.y == 0 && Physics2D.OverlapCircle(transform.position, 0.05f, groundLayer);
+        isGrounded = rb.velocity.y <= 0 && Physics2D.OverlapCircle(transform.position, 0.2f, groundLayer);
+
+        if (!CharacterController.INSTANCE.carryingBaby && rb.velocity.y < 0)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, .05f);
+            foreach (Collider2D col in colliders)
+            {
+                CharacterController c = col.GetComponent<CharacterController>();
+                if (c != null)
+                {
+                    PickUp(c);
+                    return;
+                }
+            }
+        }
 
     }
 
     public void PickUp( CharacterController c )
     {
+        if (!canBePickedUp)
+        {
+            return;
+        }
+
         c.carryingBaby = true;
         c.BabyGraphics.SetActive(true);
         c.BabyObject.gameObject.SetActive(false);
         c.BabyObject.rb.velocity = Vector2.zero;
         c.BabyObject.transform.parent = transform;
         c.BabyObject.transform.localPosition = Vector2.zero;
-        Debug.Log("baby picked up");
+    }
+
+    public void Trap( float duration )
+    {
+        StartCoroutine(SetBabyTrap(duration));
+    }
+
+
+    private IEnumerator SetBabyTrap( float duration )
+    {
+        canBePickedUp = false;
+        babyTrap.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        babyTrap.SetActive(false);
+        canBePickedUp = true;
     }
 }

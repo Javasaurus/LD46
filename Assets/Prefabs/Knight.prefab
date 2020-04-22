@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8591840619605877077}
   - component: {fileID: 8591840619605877078}
   - component: {fileID: 4330055955150970146}
+  - component: {fileID: -2699956873695992428}
   m_Layer: 9
   m_Name: Knight
   m_TagString: Untagged
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -169204101
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -5711848221618334454, guid: 48f15c62eb3144d4b88c1b36960ca8c1,
     type: 3}
@@ -286,3 +287,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-2699956873695992428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8591840619605877066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24620d1600050284b917708e712e2c1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

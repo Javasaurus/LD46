@@ -10,7 +10,7 @@ public class EnemyKnight : MonoBehaviour, Hittable
     private System.Random rand = new System.Random();
     public int hp = 5;
 
-    public float detectionRange = 10;
+    public float detectionRange = 30;
     public float speed = 5;
     public float arrivalRange = .75f;
     public Baby target;
@@ -115,7 +115,7 @@ public class EnemyKnight : MonoBehaviour, Hittable
             anim.SetBool("Running", false);
         }
 
-        if (target != null && !target.parent.isBehindObject && sr.flipX == !target.parent.sr.flipX)
+        if (target != null && !target.parent.isBehindObject /*&& sr.flipX == !target.parent.sr.flipX*/)
         {
             if (isGrounded)
             {
@@ -229,7 +229,7 @@ public class EnemyKnight : MonoBehaviour, Hittable
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 4);
         foreach (Collider2D collider in colliders)
         {
-            if (collider != bc)
+            if (collider != bc && !collider.GetComponent<EnemyEntity>())
             {
                 if (collider.GetComponent<Baby>() != null || collider.GetComponent<CharacterController>() != null)
                 {

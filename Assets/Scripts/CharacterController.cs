@@ -8,6 +8,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(BoxCollider2D))]
 public class CharacterController : MonoBehaviour, Hittable
 {
+    public string introLine;
     private System.Random systemRand = new System.Random();
 
     public static CharacterController INSTANCE;
@@ -18,7 +19,7 @@ public class CharacterController : MonoBehaviour, Hittable
     public Baby BabyObject;
     public GameObject BabyGraphics;
     public Image babyTimerGraphics;
-    public float maxBabyTimer = 10f;
+    public float maxBabyTimer = 20f;
     public float curBabyTimer = 0f;
 
 
@@ -75,7 +76,7 @@ public class CharacterController : MonoBehaviour, Hittable
 
     private void Start()
     {
-        HintsController.INSTANCE?.ShowText("Escape the royal guards ! [F] to attack [DOWN ARROW] to pick up the Prince");
+        HintsController.INSTANCE?.ShowText(introLine);
     }
 
     private void LateUpdate()
@@ -101,10 +102,10 @@ public class CharacterController : MonoBehaviour, Hittable
         }
         else
         {
-            curBabyTimer += BabyObject.isGrounded ? Time.deltaTime : Time.deltaTime / 5f;
+            curBabyTimer += Time.deltaTime * ((BabyObject.isGrounded || BabyObject.rb.velocity.y == 0) ? 2f : .25f);
             if (curBabyTimer >= maxBabyTimer)
             {
-                GameObject.FindObjectOfType<GameOverController>().SetGameOver();
+                GameObject.FindObjectOfType<GameOverController>()?.SetGameOver();
             }
         }
 
@@ -133,7 +134,7 @@ public class CharacterController : MonoBehaviour, Hittable
         attackInput = Input.GetKeyDown(KeyCode.F);
         pickupInput = Input.GetKeyDown(KeyCode.DownArrow);
         Vector2 origin = bc.bounds.center - (Vector3.up * (bc.bounds.size.y / 2));
-        bool tmpIsGrounded = rb.velocity.y == 0 && Physics2D.OverlapCircle(origin, 0.05f, groundLayer);
+        bool tmpIsGrounded = rb.velocity.y == 0 && Physics2D.OverlapCircle(origin, 0.15f);
 
         if (!isGrounded && tmpIsGrounded)
         {
@@ -146,6 +147,12 @@ public class CharacterController : MonoBehaviour, Hittable
 
     private void HandleMovement()
     {
+        if (attackInput)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         rb.gravityScale = isGrounded ? 3 : rb.velocity.y <= 0 ? 6 : 3;
 
         if (blockMoving)
@@ -238,8 +245,7 @@ public class CharacterController : MonoBehaviour, Hittable
                 CheckPoint c = collider.GetComponent<CheckPoint>();
                 if (c != null)
                 {
-                    int amount = GameObject.FindObjectsOfType<EnemyKnight>().Length;
-                    if (amount == 0)
+                    if (c.canOpen)
                     {
                         c.onHit((collider.transform.position - transform.position).normalized);
                     }
@@ -265,11 +271,9 @@ public class CharacterController : MonoBehaviour, Hittable
                 CheckPoint c = collider.GetComponent<CheckPoint>();
                 if (c != null && c.knocks > 0)
                 {
-                    //check if there are still enemy's afoot
-                    int amount = GameObject.FindObjectsOfType<EnemyKnight>().Length;
-                    if (amount > 0)
+                    if (!c.canOpen)
                     {
-                        HintsController.INSTANCE.ShowText("I won't open until all the guards are gone ! (" + amount + " remaining");
+                        HintsController.INSTANCE.ShowText("There are guards nearby!");
                         return false;
                     }
                     else
@@ -320,7 +324,7 @@ public class CharacterController : MonoBehaviour, Hittable
             BabyObject.transform.parent = transform;
             BabyObject.transform.localPosition = Vector3.zero;
             BabyObject.rb.velocity = new Vector2(Random.Range(-4f, 4f), 10f);
-            HintsController.INSTANCE.ShowText("Oh no !!!! Retrieve the baby !");
+            HintsController.INSTANCE?.ShowText("Oh no !!!! Retrieve the baby !");
         }
         else
         {

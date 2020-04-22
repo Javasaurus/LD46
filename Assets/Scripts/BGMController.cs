@@ -17,7 +17,9 @@ public class BGMController : MonoBehaviour
     public void SetGameOver()
     {
         bgm.Stop();
-        bgm.PlayOneShot(gameOverMusic);
+        bgm.clip = gameOverMusic;
+        bgm.loop = true;
+        bgm.Play();
     }
 
 

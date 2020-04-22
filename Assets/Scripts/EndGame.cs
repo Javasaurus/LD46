@@ -14,7 +14,7 @@ public class EndGame : MonoBehaviour
         if (player != null)
         {
             //check if there are still enemy's afoot
-            int amount = GameObject.FindObjectsOfType<EnemyKnight>().Length;
+            int amount = GameObject.FindObjectsOfType<EnemyEntity>().Length;
             if (amount > 0)
             {
                 HintsController.INSTANCE.ShowText("I won't open until all the guards are gone ! (" + amount + " remaining");
@@ -43,6 +43,6 @@ public class EndGame : MonoBehaviour
             overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, a);
             yield return null;
         }
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(3);
     }
 }

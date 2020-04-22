@@ -110,7 +110,7 @@ public class Enemy : MonoBehaviour, Hittable
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 2);
         foreach (Collider2D collider in colliders)
         {
-            if (collider != bc)
+            if (collider != bc && !collider.GetComponent<EnemyEntity>())
             {
                 collider.GetComponent<Hittable>()?.onHit((collider.transform.position - transform.position).normalized);
             }
@@ -119,10 +119,8 @@ public class Enemy : MonoBehaviour, Hittable
 
     private IEnumerator Flash()
     {
-        sr.color = Color.red;
-        sr.enabled = false;
+        sr.color = Color.yellow;
         yield return new WaitForSeconds(.2f);
-        sr.enabled = true;
         sr.color = originalColor;
     }
 

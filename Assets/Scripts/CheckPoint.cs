@@ -11,6 +11,8 @@ public class CheckPoint : MonoBehaviour, Hittable
     private Animator anim;
     private bool used;
 
+    public bool canOpen;
+
     private string[] Greetings = new string[]
     {
         "Come on in...Long live the king",
@@ -68,6 +70,8 @@ public class CheckPoint : MonoBehaviour, Hittable
         }
     }
 
+
+
     private void PlayDoorCreak()
     {
         sfx.PlayOneShot(doorCreak);
@@ -81,6 +85,7 @@ public class CheckPoint : MonoBehaviour, Hittable
 
     public IEnumerator Activate()
     {
+        Debug.Log("Checkpoint Reached");
         CharacterController.INSTANCE.resting = true;
         HintsController.INSTANCE.ShowText(GetRandomString());
         Vector2 center = GetComponent<BoxCollider2D>().bounds.center;
@@ -156,5 +161,26 @@ public class CheckPoint : MonoBehaviour, Hittable
         return Greetings[Random.Range(0, Greetings.Length)];
     }
 
+    private void Update()
+    {
+        //check if there are still enemy's afoot
+        EnemyEntity[] enemies = GameObject.FindObjectsOfType<EnemyEntity>();
+
+        int amount = 0;
+        foreach (EnemyEntity knight in enemies)
+        {
+            if (Vector2.Distance(knight.transform.position, transform.position) < 20)
+            {
+                amount++;
+            }
+        }
+
+        canOpen = false;
+        if (!used && amount == 0)
+        {
+            canOpen = true;
+        }
+
+    }
 
 }
